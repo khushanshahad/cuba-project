@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Knowledge Bank</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 40px auto;
+            max-width: 800px;
+            padding: 0 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        /* Tab Container */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        /* Hide the actual radio buttons */
+        .tabs input[type="radio"] {
+            display: none;
+        }
+        /* Style the labels to look like tabs */
+        .tabs label {
+            padding: 10px 20px;
+            background: #e0e0e0;
+            border: 1px solid #ccc;
+            border-bottom: none;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 5px 5px 0 0;
+            margin-right: 4px;
+            transition: background 0.3s;
+        }
+        .tabs label:hover {
+            background: #d5d5d5;
+        }
+        /* Style the content panels */
+        .tab-content {
+            width: 100%;
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 0 5px 5px 5px;
+            display: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        /* Show the content based on which radio button is checked */
+        #tab1:checked ~ .tab-content-1,
+        #tab2:checked ~ .tab-content-2,
+        #tab3:checked ~ .tab-content-3 {
+            display: block;
+        }
+        /* Highlight the active tab label */
+        #tab1:checked ~ label[for="tab1"],
+        #tab2:checked ~ label[for="tab2"],
+        #tab3:checked ~ label[for="tab3"] {
+            background: #fff;
+            border-bottom: 1px solid #fff;
+            position: relative;
+            z-index: 2;
+        }
+        /* Quick formatting for links inside content */
+        .tab-content a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .tab-content a:hover {
+            text-decoration: underline;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Code Reference Knowledge Bank</h1>
+
+    <div class="tabs">
+        <input type="radio" name="tabs" id="tab1" checked>
+        <label for="tab1">HTML Basics</label>
+
+        <input type="radio" name="tabs" id="tab2">
+        <label for="tab2">Links & Media</label>
+
+        <input type="radio" name="tabs" id="tab3">
+        <label for="tab3">Forms & Structure</label>
+
+        <div class="tab-content tab-content-1">
+            <h2>Core HTML Elements</h2>
+            <p>HTML (HyperText Markup Language) is the backbone of any website. Here are the fundamental concepts:</p>
+            <ul>
+                <li><strong>Document Structure:</strong> Every page needs a <code>&lt;!DOCTYPE html&gt;</code>, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, and <code>&lt;body&gt;</code>.</li>
+                <li><strong>Headings:</strong> Used from <code>&lt;h1&gt;</code> (most important) down to <code>&lt;h6&gt;</code>.</li>
+                <li><strong>Paragraphs:</strong> Wrapped in <code>&lt;p&gt;</code> tags.</li>
+            </ul>
+            <p>💡 <em>Resource:</em> Check out the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank">MDN HTML Web Docs</a> for deep dives.</p>
+        </div>
+
+        <div class="tab-content tab-content-2">
+            <h2>Hyperlinks & Multimedia</h2>
+            <p>Connecting pages and embedding media is what made the web famous.</p>
+            <ul>
+                <li><strong>Anchor Tags:</strong> Used for links. Example: <code>&lt;a href="url"&gt;Link Text&lt;/a&gt;</code>.</li>
+                <li><strong>Attributes:</strong> Use <code>target="_blank"</code> to open links in a new tab.</li>
+                <li><strong>Images:</strong> Embedded using <code>&lt;img src="image.jpg" alt="description"&gt;</code> (Note: it's a self-closing tag!).</li>
+            </ul>
+            <p>💡 <em>Resource:</em> Learn more about <a href="https://www.w3schools.com/html/html_links.asp" target="_blank">HTML Links at W3Schools</a>.</p>
+        </div>
+
+        <div class="tab-content tab-content-3">
+            <h2>Forms & Layouts</h2>
+            <p>Gathering user input and structuring complex data formats.</p>
+            <ul>
+                <li><strong>Forms:</strong> The <code>&lt;form&gt;</code> tag holds inputs, textareas, and submit buttons.</li>
+                <li><strong>Tables:</strong> Built using <code>&lt;table&gt;</code>, rows <code>&lt;tr&gt;</code>, headers <code>&lt;th&gt;</code>, and data cells <code>&lt;td&gt;</code>.</li>
+                <li><strong>Semantic Layouts:</strong> Modern HTML uses <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, and <code>&lt;footer&gt;</code> for better SEO.</li>
+            </ul>
+        </div>
+    </div>
+
+</body>
+</html>
