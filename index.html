@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuba Information Repository</title>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f5f0e8;
+            --surface: #fffdf8;
+            --border: #c8bfaa;
+            --accent: #8b1a1a;
+            --accent-light: #b83232;
+            --text: #1a1510;
+            --muted: #6b5e4e;
+            --tab-bg: #e8e0d0;
+            --tab-active: #fffdf8;
+            --link: #8b1a1a;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            font-weight: 300;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.75;
+        }
+
+        header {
+            background: var(--accent);
+            color: #fff;
+            padding: 2.5rem 2rem 2rem;
+            text-align: center;
+            border-bottom: 4px solid #5a1010;
+        }
+
+        header h1 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.3rem;
+        }
+
+        header p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        .container {
+            max-width: 940px;
+            margin: 0 auto;
+            padding: 0 1.5rem 3rem;
+        }
+
+        /* Tab nav */
+        .tab-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+            padding: 1.5rem 0 0;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .tab-btn {
+            background: var(--tab-bg);
+            border: 1px solid var(--border);
+            border-bottom: none;
+            padding: 0.55rem 1rem;
+            cursor: pointer;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--muted);
+            border-radius: 4px 4px 0 0;
+            transition: background 0.15s, color 0.15s;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            position: relative;
+            bottom: -2px;
+        }
+
+        .tab-btn:hover { background: #d8cebc; color: var(--text); }
+
+        .tab-btn.active {
+            background: var(--tab-active);
+            color: var(--accent);
+            border-color: var(--accent);
+            border-bottom: 2px solid var(--tab-active);
+            z-index: 2;
+        }
+
+        /* Panels */
+        .tab-panel {
+            display: none;
+            background: var(--surface);
+            border: 1px solid var(--accent);
+            border-top: none;
+            padding: 2.5rem 2.5rem 2rem;
+            border-radius: 0 0 4px 4px;
+        }
+
+        .tab-panel.active { display: block; }
+
+        /* Typography inside panels */
+        .tab-panel h2 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.35rem;
+            color: var(--accent);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.4rem;
+            margin: 2rem 0 1rem;
+        }
+
+        .tab-panel h2:first-child { margin-top: 0; }
+
+        .tab-panel h3 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.05rem;
+            color: var(--text);
+            margin: 1.5rem 0 0.6rem;
+            font-weight: 700;
+        }
+
+        .tab-panel p {
+            margin-bottom: 0.9rem;
+            font-size: 0.95rem;
+        }
+
+        .tab-panel ul {
+            padding-left: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .tab-panel li {
+            margin-bottom: 0.45rem;
+            font-size: 0.95rem;
+        }
+
+        .tab-panel blockquote {
+            border-left: 3px solid var(--accent);
+            padding: 0.5rem 0 0.5rem 1.2rem;
+            margin: 1.2rem 0;
+            font-style: italic;
+            color: var(--muted);
+            font-family: 'Libre Baskerville', serif;
+            font-size: 0.92rem;
+        }
+
+        .tab-panel blockquote cite {
+            display: block;
+            margin-top: 0.4rem;
+            font-style: normal;
+            font-size: 0.82rem;
+            font-family: 'Source Sans 3', sans-serif;
+            font-weight: 600;
+        }
+
+        /* Source citations */
+        .source {
+            font-size: 0.82rem;
+            color: var(--muted);
+            margin: 0.5rem 0 1rem;
+            padding-left: 0.8rem;
+            border-left: 2px solid var(--border);
+            line-height: 1.55;
+        }
+
+        .source a {
+            color: var(--link);
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .source a:hover { text-decoration: underline; }
+
+        a { color: var(--link); }
+
+        .section-note {
+            background: #f0e8d8;
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            padding: 0.75rem 1rem;
+            font-size: 0.88rem;
+            margin-bottom: 1.2rem;
+            color: var(--muted);
+        }
+
+        .tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.15rem 0.45rem;
+            border-radius: 2px;
+            margin-right: 0.3rem;
+            vertical-align: middle;
+        }
+
+        .tag-blocked { background: #fde8e8; color: #8b1a1a; border: 1px solid #e8b0b0; }
+        .tag-permitted { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+
+        hr { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Cuba Information Repository</h1>
+    <p>Compiled May 2026 &mdash; Sources with hyperlinks</p>
+</header>
+
+<div class="container">
+
+    <nav class="tab-nav" id="tabNav">
+        <button class="tab-btn active" data-tab="t1">1. US Relations</button>
+        <button class="tab-btn" data-tab="t2">2. Timeline</button>
+        <button class="tab-btn" data-tab="t3">3. Sanctions</button>
+        <button class="tab-btn" data-tab="t4">4. Pharma Supply</button>
+        <button class="tab-btn" data-tab="t5">5. Healthcare System</button>
+        <button class="tab-btn" data-tab="t6">6. Population Health</button>
+        <button class="tab-btn" data-tab="t7">7. Medical Innovations</button>
+        <button class="tab-btn" data-tab="t8">8. Comparable Contexts</button>
+    </nav>
+
+    <!-- TAB 1 -->
+    <div class="tab-panel active" id="t1">
+        <h2>1. Cuba / US Relations</h2>
+        <h3>Early History: Spanish-American War and Early U.S. Control (1898–1902)</h3>
+        <p class="source">
+            De Guzman, C., &amp; Jeyaretnam, M. (2026, March 17). The crisis in Cuba, explained. <em>Time.</em><br>
+            <a href="https://time.com/article/2026/03/17/cuba-economic-energy-crisis-trump-us-explainer/" target="_blank">https://time.com/article/2026/03/17/cuba-economic-energy-crisis-trump-us-explainer/</a>
+        </p>
+    </div>
+
+    <!-- TAB 2 -->
+    <div class="tab-panel" id="t2">
+        <h2>2. Timeline: Cuba / US Relations (1959–2026)</h2>
+        <div class="section-note">Primary source for timeline entries unless otherwise noted: <a href="https://www.cfr.org/articles/us-cuba-relations" target="_blank">Council on Foreign Relations</a></div>
+
+        <p class="source">
+            Mallory, L. D. (1960, April 6). <em>The decline and fall of Castro</em> [Declassified memorandum]. U.S. Department of State. National Security Archive, George Washington University.<br>
+            <a href="https://nsarchive.gwu.edu/document/27400-document-1-state-department-memorandum-decline-and-fall-castro-secret-april-6-1960" target="_blank">https://nsarchive.gwu.edu/document/27400-document-1-state-department-memorandum-decline-and-fall-castro-secret-april-6-1960</a>
+        </p>
+        <p class="source">
+            National Security Archive. (2022, February 2). Cuba embargoed: U.S. trade sanctions turn sixty. <em>National Security Archive.</em><br>
+            <a href="https://nsarchive.gwu.edu/briefing-book/cuba/2022-02-02/cuba-embargoed-us-trade-sanctions-turn-sixty" target="_blank">https://nsarchive.gwu.edu/briefing-book/cuba/2022-02-02/cuba-embargoed-us-trade-sanctions-turn-sixty</a>
+        </p>
+
+        <h3>Executive Orders</h3>
+
+        <h3>January 29, 2026 — EO 14380: Embargo Intensifies Restrictions</h3>
+        <p>Trump signed Executive Order 14380, declaring Cuba an "unusual and extraordinary threat" to U.S. national security. Oil deliveries are blocked, resulting in blackouts up to 20 hours a day.</p>
+        <p class="source">
+            Executive Order No. 14380, 91 Fed. Reg. 8987 (Feb. 3, 2026).<br>
+            <a href="https://www.whitehouse.gov/presidential-actions/2026/01/addressing-threats-to-the-united-states-by-the-government-of-cuba/" target="_blank">https://www.whitehouse.gov/presidential-actions/2026/01/addressing-threats-to-the-united-states-by-the-government-of-cuba/</a>
+        </p>
+
+        <h3>May 1, 2026 — EO 14404: Expanded Secondary Sanctions</h3>
+        <p>President Trump froze U.S. assets of any foreign individual or entity operating in key sectors of the Cuban economy: energy, defense, metals and mining, financial services, and security. The order forced foreign banks to choose between access to Cuba and access to the U.S. financial system.</p>
+        <p class="source">
+            The White House. (2026, May 1). <em>Imposing sanctions on those responsible for repression in Cuba and for threats to United States national security and foreign policy</em> (Executive Order No. 14404). <em>Federal Register, 91</em> FR 25061.<br>
+            <a href="https://www.federalregister.gov/documents/2026/05/07/2026-09173/imposing-sanctions-on-those-responsible-for-repression-in-cuba-and-for-threats-to-united-states" target="_blank">https://www.federalregister.gov/documents/2026/05/07/2026-09173/imposing-sanctions-on-those-responsible-for-repression-in-cuba-and-for-threats-to-united-states</a>
+            <br>White House Fact Sheet: <a href="https://www.whitehouse.gov/fact-sheets/2026/05/fact-sheet-president-donald-j-trump-imposes-sanctions-on-cuban-regime-officials-responsible-for-repression-and-threats-to-u-s-national-security-and-foreign-policy/" target="_blank">whitehouse.gov/fact-sheets/…</a>
+        </p>
+
+        <h3>May 7, 2026 — UN Experts Condemn Blockade as "Energy Starvation"</h3>
+        <p>A joint statement by three UN human rights special rapporteurs — Surya Deva, Sofia Monsalve Suarez, and Pedro Arrojo-Agudo — condemned the U.S. fuel blockade as "energy starvation." The statement noted that 187 nations have voted every year at the UN General Assembly to end the U.S. embargo. Only the U.S. and Israel dissent.</p>
+        <p class="source">
+            Office of the United Nations High Commissioner for Human Rights. (2026, May 7). United States must end energy starvation of Cuba: UN experts. <em>OHCHR.</em><br>
+            <a href="https://www.ohchr.org/en/press-releases/2026/05/united-states-must-end-energy-starvation-cuba-severe-human-rights-impacts-un" target="_blank">https://www.ohchr.org/en/press-releases/2026/05/united-states-must-end-energy-starvation-cuba-severe-human-rights-impacts-un</a>
+        </p>
+
+        <h3>May 20, 2026 — United States Indicts Raúl Castro</h3>
+        <p>The United States unsealed an indictment against Raúl Castro and five Castro regime co-defendants for the 1996 shoot-down of Brothers to the Rescue aircraft.</p>
+        <p class="source">
+            U.S. Department of Justice. (2026, May 20). United States unseals superseding indictment charging Raúl Castro and five Castro regime co-defendants.<br>
+            <a href="https://www.justice.gov/opa/pr/united-states-unseals-superseding-indictment-charging-raul-castro-and-five-castro-regime-co" target="_blank">https://www.justice.gov/opa/pr/united-states-unseals-superseding-indictment-charging-raul-castro-and-five-castro-regime-co</a>
+        </p>
+    </div>
+
+    <!-- TAB 3 -->
+    <div class="tab-panel" id="t3">
+        <h2>3. Sanctions: Financial Landscape</h2>
+        <div class="section-note">Note: All embargoes are sanctions, but not all sanctions are embargoes.</div>
+
+        <h2>CACR General Licenses and the Humanitarian Exception</h2>
+
+        <p><strong><span class="tag tag-blocked">Blocked</span></strong></p>
+        <ul>
+            <li>Direct transfers to Cuban banks or individuals</li>
+            <li>Personal remittances via U.S. card networks</li>
+            <li>Commercial transactions with Cuban entities</li>
+            <li>Payments routed through OFAC-blocked Cuban financial institutions (e.g. Banco Central de Cuba)</li>
+        </ul>
+
+        <p><strong><span class="tag tag-permitted">Permitted</span></strong></p>
+        <ul>
+            <li>Donations to U.S.-registered NGOs and humanitarian organizations operating in Cuba</li>
+            <li>Medical, disaster relief, and food aid projects (CACR §515.575)</li>
+            <li>Transactions that go to a licensed U.S. entity — not to Cuba directly</li>
+            <li>Food donations to NGOs/individuals are explicitly exempt from CACR prohibitions (§515.206(b))</li>
+        </ul>
+        <p class="source">
+            Office of Foreign Assets Control. (n.d.). Cuba sanctions FAQs #740, #741 | CACR §515.206(b), §515.575. U.S. Department of the Treasury.<br>
+            <a href="https://ofac.treasury.gov/faqs/topic/1541" target="_blank">https://ofac.treasury.gov/faqs/topic/1541</a>
+        </p>
+        <p class="source">
+            ProQuest Dissertations &amp; Theses. (n.d.). [Supporting dissertation/thesis source on CACR general licenses and humanitarian exceptions].<br>
+            <a href="https://www.proquest.com/docview/3100622625?%20Theses&fromopenview=true&pq-origsite=gscholar&sourcetype=Dissertations%20" target="_blank">https://www.proquest.com/docview/3100622625</a>
+        </p>
+
+        <h2>How Remittances Reach Cuba</h2>
+        <p><strong>Formal channels:</strong> banks, Western Union, remittance agencies, parcel agencies, postal offices, digital platforms (e.g. TropiPay).</p>
+        <p><strong>Informal channels:</strong> trusted travelers, personal travel, friends, hawala-style brokers, cryptocurrencies.</p>
+        <p>Usage among Miami-based senders (survey data):</p>
+        <ul>
+            <li>69% use formal channels: parcel agencies (28%), Western Union (22%), remittance agencies (15%)</li>
+            <li>63% use informal channels: personal travel (44%), "mules" (38%)</li>
+            <li>48% use both formal and informal channels</li>
+        </ul>
+        <p class="source">
+            ProQuest Dissertations &amp; Theses. (n.d.). [Supporting dissertation/thesis source on remittance channels to Cuba].<br>
+            <a href="https://www.proquest.com/docview/3100622625?%20Theses&fromopenview=true&pq-origsite=gscholar&sourcetype=Dissertations%20" target="_blank">https://www.proquest.com/docview/3100622625</a>
+        </p>
+
+        <h2>Why a Foreign Visa Card Works in Havana</h2>
+        <p>OFAC explicitly permits this:</p>
+        <ul>
+            <li>CACR §515.584(c): Visa/Mastercard may process card transactions for third-country nationals in Cuba</li>
+            <li>OFAC FAQ #740: U.S. card network operators may process and settle transactions for foreign (non-U.S.) financial institutions in Cuba</li>
+            <li>OFAC FAQ #741: This applies even to U.S. banks' foreign branches</li>
+        </ul>
+        <p>The jurisdiction boundary: U.S. sanctions apply to "U.S. persons" — citizens, residents, U.S.-incorporated entities. A German bank issuing a Visa card is not a U.S. person. Visa's SEC filing notes that "limited activities may occur involving Visa-branded cards issued outside Cuba by non-US institutions."</p>
+        <p class="source">
+            Office of Foreign Assets Control. (n.d.). FAQs #740, #741 | CACR §515.584(c) | EU Blocking Statute Reg. 2271/96 | Visa SEC Filing (EDGAR 2014). U.S. Department of the Treasury.<br>
+            <a href="https://ofac.treasury.gov/faqs/topic/1541" target="_blank">https://ofac.treasury.gov/faqs/topic/1541</a>
+        </p>
+        <p class="source">
+            Visa Inc. (n.d.). <em>Visa Merchant Data Standards Manual.</em> Visa USA.<br>
+            <a href="https://usa.visa.com/content/dam/VCOM/download/merchants/visa-merchant-data-standards-manual.pdf" target="_blank">https://usa.visa.com/content/dam/VCOM/download/merchants/visa-merchant-data-standards-manual.pdf</a>
+        </p>
+        <p class="source">
+            Visa Inc. (n.d.). <em>Visa Core Rules and Visa Product and Service Rules.</em> Visa USA.<br>
+            <a href="https://usa.visa.com/content/dam/VCOM/download/about-visa/visa-rules-public.pdf" target="_blank">https://usa.visa.com/content/dam/VCOM/download/about-visa/visa-rules-public.pdf</a>
+        </p>
+
+        <h2>The EU Blocking Statute</h2>
+        <p>Regulation 2271/96 (updated 2018) prohibits EU companies from complying with certain U.S. extraterritorial sanctions — originally created to counter U.S. Cuba policy. It requires EU firms to report to the European Commission if U.S. sanctions affect them, and allows recovery of damages caused by U.S. sanctions compliance.</p>
+        <p><em>Practical limit:</em> EU companies still mostly comply with U.S. sanctions — losing U.S. market access vastly outweighs EU fines. The statute is more of a political shield than an enforcement tool.</p>
+        <p class="source">
+            Council Regulation (EC) No 2271/96 of 22 November 1996 protecting against the effects of the extra-territorial application of legislation adopted by a third country. <em>Official Journal of the European Communities, L 309,</em> 1–6.<br>
+            <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A31996R2271" target="_blank">https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A31996R2271</a>
+        </p>
+        <p class="source">
+            Agence France-Presse. (2026, April 23). EU contemplates using blocking statute in response to Trump sanctions against ICC. <em>Le Monde.</em><br>
+            <a href="https://www.lemonde.fr/en/international/article/2026/04/23/eu-contemplates-using-blocking-statute-in-response-to-trump-sanctions-against-icc_6752754_4.html" target="_blank">https://www.lemonde.fr/en/international/article/2026/04/23/eu-contemplates-using-blocking-statute-in-response-to-trump-sanctions-against-icc_6752754_4.html</a>
+        </p>
+
+        <h2>U.S. vs. EU Enforcement</h2>
+        <p><strong>U.S. position:</strong> If you deal with sanctioned Cuban sectors, you lose access to the U.S. market. Enforcement is aggressive — billions in fines, loss of banking licenses. Outcome: most global companies "over-comply" with the U.S. to avoid risk.</p>
+        <p><strong>EU position:</strong> It is illegal for EU companies to follow these U.S. rules. Enforcement is historically weak. Outcome: the EU often files a complaint with the WTO but cannot stop the U.S. Treasury.</p>
+
+        <h2>Sanctioned Country vs. Sanctioned Person</h2>
+        <p><strong>Country-level sanctions (e.g. Cuba):</strong> broad regulatory framework targeting an entire nation, with built-in carve-outs — general licenses, humanitarian exceptions, third-country carve-outs. Administered via the CACR (Cuba) and ITSR (Iran). Goal is economic pressure on a government.</p>
+        <p><strong>Individual SDN designation:</strong> binary — on the list, frozen out. No licenses, no exceptions. All U.S.-jurisdiction assets blocked immediately; no U.S. person may transact. Secondary sanctions threat: foreign companies risk U.S. market access if they deal with SDN-listed individuals.</p>
+        <p>Why Visa, Mastercard, and banks always choose U.S. compliance over EU obligations: OFAC fines and loss of dollar-clearing access are existential. EU Blocking Statute fines are minor and rarely enforced.</p>
+        <p class="source">
+            AML Watcher. (n.d.). Cuba sanctions: An overview of the regulatory framework.<br>
+            <a href="https://amlwatcher.com/blog/cuba-sanctions/" target="_blank">https://amlwatcher.com/blog/cuba-sanctions/</a>
+        </p>
+        <p class="source">
+            Coalition for the International Criminal Court. (2026, April). Criminalising accountability: The U.S. lawfare against the international justice system. <em>Courthouse News.</em><br>
+            <a href="https://www.courthousenews.com/wp-content/uploads/2026/04/cicc-2026-report-criminalising-accountability-the-us-lawfare-against-the-international-justice-system.pdf" target="_blank">https://www.courthousenews.com/wp-content/uploads/2026/04/cicc-2026-report-criminalising-accountability-the-us-lawfare-against-the-international-justice-system.pdf</a>
+        </p>
+    </div>
+
+    <!-- TAB 4 -->
+    <div class="tab-panel" id="t4">
+        <h2>4. Medical &amp; Pharmaceutical Supply Chain</h2>
+
+        <h2>Cuba's Pharmaceutical System</h2>
+        <ul>
+            <li><strong>FARMACUBA</strong> (under BioCubaFarma): manages import of raw materials, packaging, pharmaceuticals, reagents, equipment, and spare parts. Produces roughly 60–80% of domestic needs.</li>
+            <li><strong>MediCuba</strong> (under MINSAP): distributes both locally produced and imported medicines throughout Cuba. Imports approximately 38% of drugs not made locally.</li>
+            <li><strong>ENCOMED:</strong> manages markets, establishes quantities, makes payments, and coordinates movement of goods and their entry into Cuba for drugs not produced domestically.</li>
+        </ul>
+
+        <h2>How U.S. Sanctions Create Obstacles</h2>
+        <ol style="padding-left:1.4rem; margin-bottom:1rem;">
+            <li style="margin-bottom:0.6rem"><strong>The USD/banking chokepoint.</strong> Any transaction that touches the U.S. dollar — even between two non-U.S. parties — requires clearance through a U.S. financial institution, which is prohibited from processing Cuba-related transactions.</li>
+            <li style="margin-bottom:0.6rem"><strong>The chilling effect on willing suppliers.</strong> In 2019, the airline Emirates rejected a shipment contracted by MediCuba from an Indian manufacturer, claiming it could not transport goods destined for Cuba.</li>
+            <li style="margin-bottom:0.6rem"><strong>The 10% U.S.-content rule.</strong> A U.S. Department of Commerce rule prohibits export of goods to Cuba by companies in third countries if those goods contain even 10% de minimis U.S.-origin content.</li>
+        </ol>
+        <p>These constraints are documented in the 1997 American Association for World Health report, which noted that a ban on subsidiary trade severely constrained Cuba's ability to import medicines from third-country sources, that numerous licenses for medical equipment and medicines had been denied on the grounds that exports "would be detrimental to U.S. foreign policy interests," and that ships were prohibited from loading or unloading cargo in U.S. ports for 180 days after delivering cargo to Cuba.</p>
+        <p class="source">
+            American Association for World Health. (1997). Denial of food and medicine: The impact of the U.S. embargo on health and nutrition in Cuba.<br>
+            <a href="https://www.american.edu/centers/latin-american-latino-studies/upload/impact-of-us-embargo-on-health-nutrition-in-cuba-1997.pdf" target="_blank">https://www.american.edu/centers/latin-american-latino-studies/upload/impact-of-us-embargo-on-health-nutrition-in-cuba-1997.pdf</a>
+        </p>
+        <p class="source">
+            Oxfam America &amp; Washington Office on Latin America. (1997). Myths and facts about the U.S. embargo on medicine and medical supplies.<br>
+            <a href="https://www.wola.org/sites/default/files/downloadable/Cuba/past/cuba_myths_facts.pdf" target="_blank">https://www.wola.org/sites/default/files/downloadable/Cuba/past/cuba_myths_facts.pdf</a>
+        </p>
+
+        <h2>Major Pharmaceutical Suppliers</h2>
+        <ul>
+            <li><strong>India</strong> — #1 supplier. Top source of finished drugs. $32 million in pharma exports in FY24.</li>
+            <li><strong>Mexico</strong> — #2 supplier. Largest by volume: 82% of tracked shipments. Low freight cost.</li>
+            <li><strong>Vietnam</strong> — #3 supplier. Growing generics source. Trade often handled in local currencies.</li>
+        </ul>
+        <p><strong>How these suppliers bypass U.S. restrictions:</strong></p>
+        <ul>
+            <li>Non-USD payment rails: Cuba has been integrating into Russia's MIR payment card system and China's UnionPay.</li>
+            <li>Structuring deals through non-U.S.-exposed suppliers: smaller Indian generic manufacturers have less U.S. market exposure and are therefore less afraid of OFAC risk than large multinationals.</li>
+            <li>State-to-state aid framing: A significant portion of India's pharmaceutical shipments to Cuba are framed as humanitarian or government-to-government transfers, reducing the commercial paper trail that attracts bank scrutiny.</li>
+        </ul>
+        <p class="source">
+            Javeriana University. (2020). Cuba's pharmaceutical supply chain and the impact of the U.S. embargo. <em>Investigación y Desarrollo, 24.</em><br>
+            <a href="https://revistas.javeriana.edu.co/files-articulos/IUED/24%20(2020)/47762366004/#redalyc_47762366004_ref11" target="_blank">https://revistas.javeriana.edu.co/files-articulos/IUED/24%20(2020)/47762366004/#redalyc_47762366004_ref11</a>
+        </p>
+    </div>
+
+    <!-- TAB 5 -->
+    <div class="tab-panel" id="t5">
+        <h2>5. The Cuban Healthcare System</h2>
+
+        <h2>Structure: Four Tiers</h2>
+        <p>Cuba built a successful four-tier healthcare system under difficult circumstances that rivals those of the wealthiest nations.</p>
+        <ul>
+            <li><strong>Tier 1 — The consultorio:</strong> community-based clinic staffed by a doctor-nurse dyad who live in the community they serve. Patient files are recorded by hand and delivered daily to the polyclinic. The basic health team also includes an OB/GYN, pediatrician, psychiatrist, social worker, and statistician from the regional polyclinic.</li>
+            <li><strong>Tier 2 — Polyclinics:</strong> approximately 450 across the country. Specialists visit the consultorios from here.</li>
+            <li><strong>Tier 3 — Hospitals</strong></li>
+            <li><strong>Tier 4 — Complex institutes,</strong> handling specialized care and research</li>
+        </ul>
+        <blockquote>
+            "One of the things I suspect might be part of the secret sauce that we are missing in the U.S. is this role of community. The doctor is a part of the community and is able to think about the health of her patients as the people she lives with, and literally and metaphorically bumps elbows with every single day."
+            <cite>— Seervai, S. (Host). (2019, June 28). Cuba: Where primary care is all about community [Audio podcast episode]. In <em>The Dose</em>. Commonwealth Fund. <a href="https://doi.org/10.26099/z6r9-6020" target="_blank">https://doi.org/10.26099/z6r9-6020</a></cite>
+        </blockquote>
+
+        <h2>Key Health Outcomes</h2>
+        <p>Cuba dedicated a high proportion of GDP to healthcare, with thousands of medical professionals in a total of fifty-six countries, even as its domestic system struggled from workforce shortages and wage-driven brain drain into the hospitality sector.</p>
+        <p>In 2017, Cuba's infant mortality rate was half that of Washington, D.C. However, as of 2025, Cuba's infant mortality rate has risen to 9.9 out of 1,000 births. Main et al. (2026) note that "recent studies show a strong causal relationship between sanctions imposed and increased death rates," citing a <em>Lancet Global Health</em> study finding sanctions cause approximately 564,000 deaths annually.</p>
+        <p class="source">
+            Main, A., Sammut, J., Weisbrot, M., &amp; Long, G. (2026, April 27). <em>US sanctions and the sharp rise in infant mortality in Cuba.</em> Center for Economic and Policy Research.<br>
+            <a href="https://cepr.net/publications/us-sanctions-and-the-sharp-rise-in-infant-mortality-in-cuba/" target="_blank">https://cepr.net/publications/us-sanctions-and-the-sharp-rise-in-infant-mortality-in-cuba/</a>
+        </p>
+        <p class="source">
+            Yaffe, H. (2026, March 23). US attacks on Cuban medical missions risk damaging healthcare for poor people in developing countries. <em>The Conversation.</em><br>
+            <a href="https://theconversation.com/us-attacks-on-cuban-medical-missions-risk-damaging-healthcare-for-poor-people-in-developing-countries-278748" target="_blank">https://theconversation.com/us-attacks-on-cuban-medical-missions-risk-damaging-healthcare-for-poor-people-in-developing-countries-278748</a>
+        </p>
+        <p class="source">
+            Radoslav Yordanov (2023). The Long Misunderstanding: Cuba's Economic Ties with the Soviet Bloc. <em>Journal of Cold War Studies</em>, 25(4), 24–52.<br>
+            <a href="https://doi.org/10.1162/jcws_a_01169" target="_blank">https://doi.org/10.1162/jcws_a_01169</a>
+        </p>
+
+        <h2>Cuban Medical Internationalism and Its Economic Dimension</h2>
+        <p>The four forms of Cuban medical internationalism established in the 1960s are:</p>
+        <ul>
+            <li>Emergency medical brigades overseas</li>
+            <li>Treatment of foreign patients in Cuba</li>
+            <li>Training foreign students as healthcare professionals</li>
+            <li>Establishment of public healthcare facilities overseas</li>
+        </ul>
+        <p>Even with tens of thousands of medical workers overseas, the state's investment in healthcare and medical training means the Cuban population has the highest ratio of doctors per person in the world.</p>
+        <p>The oil-for-doctors program between Cuba and Venezuela, formalized in 2004, transformed the export of healthcare professionals into Cuba's greatest revenue source. The U.S. government's attack on Cuban medical internationalism began in 2006. Since 2025, the Trump administration has imposed visa restrictions on government officials in Brazil, Grenada, and several African countries for working with Cuban medical programs.</p>
+        <p class="source">
+            The Economist. (2020, April 4). Cuba's doctors are in high demand. <em>The Economist.</em><br>
+            <a href="https://www.economist.com/the-americas/2020/04/04/cubas-doctors-are-in-high-demand" target="_blank">https://www.economist.com/the-americas/2020/04/04/cubas-doctors-are-in-high-demand</a>
+        </p>
+        <p class="source">
+            Toosi, N., &amp; Bazail-Eimil, E. (2026, February 28). Memo lays out Trump's squeeze on Cuban doctor program. <em>Politico.</em><br>
+            <a href="https://www.yahoo.com/news/articles/memo-lays-trump-squeeze-cuban-163000883.html" target="_blank">https://www.yahoo.com/news/articles/memo-lays-trump-squeeze-cuban-163000883.html</a>
+        </p>
+    </div>
+
+    <!-- TAB 6 -->
+    <div class="tab-panel" id="t6">
+        <h2>6. Population Health Impact</h2>
+
+        <h2>Who Is Affected Inside Cuba</h2>
+        <ul>
+            <li>Families bringing their own supplies to hospitals</li>
+            <li>Patients buying medicine via chat groups — sometimes at 50 times the official cost</li>
+            <li>Caregivers to the elderly, often elderly themselves, exhausted and facing scarcity</li>
+            <li>More than 1 million of Cuba's ~10 million residents left between 2022 and 2023, fracturing families</li>
+            <li>Doctors not paid enough to cover basic living expenses — switching to tourism and hospitality</li>
+            <li>Since February 2026: health services reduced to emergency care, mother-child health, and cancer treatment only</li>
+        </ul>
+        <blockquote>
+            "Those who suffer first and suffer most are ordinary people, especially the most vulnerable."
+            <cite>— Francisco Pichón, UN Resident Coordinator in Cuba</cite>
+        </blockquote>
+        <p class="source">
+            García, Y. M. (2026, March 3). In Cuba, government mismanagement and US oil moves tell in human suffering. <em>The New Humanitarian.</em><br>
+            <a href="https://www.thenewhumanitarian.org/news-feature/2026/03/03/cuba-relentless-us-pressure-human-suffering" target="_blank">https://www.thenewhumanitarian.org/news-feature/2026/03/03/cuba-relentless-us-pressure-human-suffering</a>
+        </p>
+        <p class="source">
+            United Nations News. (2026, March 26). Cuba blockade hits healthcare.<br>
+            <a href="https://news.un.org/en/story/2026/03/1167203" target="_blank">https://news.un.org/en/story/2026/03/1167203</a>
+        </p>
+
+        <h2>Who Is Affected Outside Cuba</h2>
+        <ul>
+            <li>Healthcare experts worldwide blocked from Cuba's medical innovations</li>
+            <li>Countries that rely on Cuban doctors — especially in rural and underserved areas</li>
+            <li>Americans largely unaware of the humanitarian crisis caused by U.S. policy</li>
+            <li>Information sharing between Cuban and non-Cuban healthcare professionals restricted</li>
+            <li>UN humanitarian plan covering ~2 million people — $68 million funding gap</li>
+        </ul>
+        <p class="source">
+            American Association for World Health. (1997). Denial of food and medicine.<br>
+            <a href="https://www.american.edu/centers/latin-american-latino-studies/upload/impact-of-us-embargo-on-health-nutrition-in-cuba-1997.pdf" target="_blank">https://www.american.edu/centers/latin-american-latino-studies/upload/impact-of-us-embargo-on-health-nutrition-in-cuba-1997.pdf</a>
+        </p>
+
+        <h2>Current Crisis: Key Facts (2026)</h2>
+        <ul>
+            <li>No oil imported to the island since January 9, 2026</li>
+            <li>Multiple nationwide blackouts — power outages lasting up to 20+ hours a day</li>
+            <li>Airlines curtailing flights, devastating the tourism sector</li>
+            <li>Hospitals struggling to maintain emergency and intensive care services</li>
+            <li>Uncollected garbage accumulating and spreading disease</li>
+        </ul>
+        <blockquote>
+            "Health should be protected at all costs and never be at the mercies of geopolitics, energy blockades and power outages. The situation in Cuba is deeply concerning as the country struggles to maintain health service delivery at a time of immense turbulence."
+            <cite>— WHO Director-General Tedros Adhanom Ghebreyesus</cite>
+        </blockquote>
+        <p class="source">
+            Agence France-Presse. (2026, March 26). Cuba's escalating health crisis is 'deeply concerning,' says WHO chief. <em>Le Monde.</em><br>
+            <a href="https://www.lemonde.fr/en/international/article/2026/03/26/cuba-s-escalating-health-crisis-is-deeply-concerning-says-who-chief_6751817_4.html" target="_blank">https://www.lemonde.fr/en/international/article/2026/03/26/cuba-s-escalating-health-crisis-is-deeply-concerning-says-who-chief_6751817_4.html</a>
+        </p>
+        <p class="source">
+            García, Y. M. (2026, March 3). In Cuba, government mismanagement and US oil moves tell in human suffering. <em>The New Humanitarian.</em><br>
+            <a href="https://www.thenewhumanitarian.org/news-feature/2026/03/03/cuba-relentless-us-pressure-human-suffering" target="_blank">https://www.thenewhumanitarian.org/news-feature/2026/03/03/cuba-relentless-us-pressure-human-suffering</a>
+        </p>
+
+        <h2>How the Blockade Affects Population Health: Internal Factors</h2>
+        <p>Cuba's four-tier healthcare system rivals wealthy nations and the government spends a significant portion of its GDP on healthcare. A pillar of its economy has been sending healthcare workers to 56 countries around the world. Since the crisis, healthcare workers have shifted into the hospitality sector, where they can make more money.</p>
+        <p class="source">
+            Yaffe, H. (2026, March 23). US attacks on Cuban medical missions risk damaging healthcare for poor people in developing countries. <em>The Conversation.</em><br>
+            <a href="https://theconversation.com/us-attacks-on-cuban-medical-missions-risk-damaging-healthcare-for-poor-people-in-developing-countries-278748" target="_blank">https://theconversation.com/us-attacks-on-cuban-medical-missions-risk-damaging-healthcare-for-poor-people-in-developing-countries-278748</a>
+        </p>
+        <p class="source">
+            Seervai, S. (Host). (2019, June 28). Cuba: Where primary care is all about community [Audio podcast episode]. In <em>The Dose.</em> Commonwealth Fund.<br>
+            <a href="https://doi.org/10.26099/z6r9-6020" target="_blank">https://doi.org/10.26099/z6r9-6020</a>
+        </p>
+
+        <h2>How the Blockade Affects Population Health: External Factors</h2>
+        <p>At the height of the COVID-19 pandemic, Vyaire Medical bought ventilator manufacturers IMTmedical and Acutronic, immediately banning all sale of ventilators to Cuba.</p>
+        <p>Cuba is a test case for how international pressure and sanctions systems fail vulnerable populations.</p>
+        <p class="source">
+            CubaMinrex. (2020, April 16). <em>Blockade: U.S. company buys key lung ventilator manufacturers, COVID-19 and suspends sales to Cuba.</em><br>
+            <a href="https://misiones.cubaminrex.cu/en/articulo/blockade-us-company-buys-key-lung-ventilator-manufacturers-covid-19-and-suspends-sales-cuba" target="_blank">https://misiones.cubaminrex.cu/en/articulo/blockade-us-company-buys-key-lung-ventilator-manufacturers-covid-19-and-suspends-sales-cuba</a>
+        </p>
+        <p class="source">
+            Rodríguez, R. (2020, December 18). U.S. economic sanctions on Cuba in the context of the pandemic COVID-19. <em>Ethics &amp; International Affairs.</em> Carnegie Council.<br>
+            <a href="https://www.ethicsandinternationalaffairs.org/online-exclusives/u-s-economic-sanctions-on-cuba-in-the-context-of-the-pandemic-covid-19" target="_blank">https://www.ethicsandinternationalaffairs.org/online-exclusives/u-s-economic-sanctions-on-cuba-in-the-context-of-the-pandemic-covid-19</a>
+        </p>
+
+        <h2>Informal Solidarity Networks</h2>
+        <p>Cubans have a long history of informal solidarity networks that fill critical gaps left by the state. Red de Ayuda Humanitaria has raised around €2,000 since October 2025 and imported over 400 kilos of medicines from Spain, with more than 300 volunteers outside and inside Cuba contributing in different ways, from fundraising and logistics to outreach and coordination.</p>
+
+        <h2>Evidence Base: Sanctions and Health Outcomes</h2>
+        <p class="source">
+            Pinna Pintor, M., Suhrcke, M., &amp; Hamelmann, C. (2023). The impact of economic sanctions on health and health systems in low-income and middle-income countries: A systematic review and narrative synthesis. <em>BMJ Global Health, 8</em>(2), e010968.<br>
+            <a href="https://doi.org/10.1136/bmjgh-2022-010968" target="_blank">https://doi.org/10.1136/bmjgh-2022-010968</a>
+        </p>
+
+        <h2>Lessons from Venezuela: Sanctions and Public Health</h2>
+        <p class="source">
+            Page, K. R., Doocy, S., Reyna Ganteaume, F., Castro, J. S., Spiegel, P., &amp; Beyrer, C. (2019). Venezuela's public health crisis: a regional emergency. <em>Lancet, 393</em>(10177), 1254–1260.<br>
+            <a href="https://doi.org/10.1016/S0140-6736(19)30344-7" target="_blank">https://doi.org/10.1016/S0140-6736(19)30344-7</a>
+        </p>
+        <p class="source">
+            Zakrison, T. L., &amp; Muntaner, C. (2019). US sanctions in Venezuela: Help, hindrance, or violation of human rights? <em>The Lancet, 393</em>(10191), 2586–2587.<br>
+            <a href="https://doi.org/10.1016/S0140-6736(19)31397-2" target="_blank">https://doi.org/10.1016/S0140-6736(19)31397-2</a>
+        </p>
+
+        <h2>Russian Tanker Exception</h2>
+        <p>Trump's decision to allow a Russian tanker to break the Cuba blockade for "humanitarian reasons" continues a pattern of allowing Russia to operate with virtual impunity. Moscow's testing of an American blockade within its own hemisphere coincides with its intelligence sharing efforts on behalf of Iran amid its ongoing war with the U.S. and Israel.</p>
+        <p class="source">
+            Seligman, L. (2026, March 30). White House: Russian tanker allowed to break Cuba blockade for "humanitarian reasons." <em>Politico.</em><br>
+            <a href="https://www.politico.com/news/2026/03/30/russian-tanker-cuba-blockade-humanitarian-00850838" target="_blank">https://www.politico.com/news/2026/03/30/russian-tanker-cuba-blockade-humanitarian-00850838</a>
+        </p>
+    </div>
+
+    <!-- TAB 7 -->
+    <div class="tab-panel" id="t7">
+        <h2>7. Cuban Medical Innovations: What the World Misses</h2>
+        <blockquote>
+            "Cuban scientists are known for ingenuity in the face of adversity."
+            <cite>— Stone, R. (2026, March 30). As U.S. blockade bites, Cuba's health care and science suffer. <em>Science.</em> <a href="https://www.science.org/content/article/u-s-blockade-bites-cuba-s-health-care-and-science-suffer" target="_blank">science.org</a></cite>
+        </blockquote>
+        <blockquote>
+            "The idea that Cuba, with only 11 million people, and limited income, could be a biotech power, might be incomprehensible for someone working at Pfizer, but for Cuba it is possible."
+            <cite>— John Kirk, Professor Emeritus of Latin American Studies, Dalhousie University<br>
+            Augustin, E. (2022, January 5). Cuba's vaccine success story. <em>The Guardian.</em> <a href="https://www.theguardian.com/world/2022/jan/05/cuba-coronavirus-covid-vaccines-success-story" target="_blank">theguardian.com</a></cite>
+        </blockquote>
+
+        <h2>Treatments Blocked from U.S. Patients and Researchers</h2>
+        <ul>
+            <li><strong>CIMAVax-EGF:</strong> lung cancer vaccine. U.S. access only via Roswell Park clinical trials.</li>
+            <li><strong>Meningitis B vaccine:</strong> not approved by FDA.</li>
+            <li><strong>Interferon Alfa-2b (Heberon® Alpha R):</strong> produced in Cuba, blocked.</li>
+            <li><strong>Streptokinase:</strong> clot-dissolving drug, blocked.</li>
+            <li><strong>Teravac-HIV-1:</strong> AIDS vaccine in clinical trials in Cuba, blocked.</li>
+            <li><strong>5 COVID vaccines:</strong> Soberana 1 &amp; 2, Soberana Plus, Abdala, Mambisa.</li>
+            <li><strong>Nimotuzumab:</strong> monoclonal antibody therapy for cancer.</li>
+            <li><strong>HeberFERON:</strong> skin cancer treatment.</li>
+            <li><strong>NeuroEPO plus (NeuralCIM®):</strong> Alzheimer's treatment shown to slow disease progression.</li>
+            <li><strong>Heberprot-P:</strong> treatment for diabetic foot ulcers that significantly reduces amputation rates. Not available in the U.S.</li>
+        </ul>
+        <p>Cuba's medical information itself is restricted. Travel bans, currency regulations, and shipping difficulties mean advances in Cuban research rarely reach U.S. scientists or patients.</p>
+
+        <hr>
+        <h3>Sources</h3>
+        <p class="source">
+            American Association for World Health. (1997). Denial of food and medicine: The impact of the U.S. embargo on health and nutrition in Cuba. [CIMAVax, Meningitis B, Interferon Alfa-2b, Streptokinase, Teravac-HIV-1, medical information restriction]<br>
+            <a href="https://www.american.edu/centers/latin-american-latino-studies/upload/impact-of-us-embargo-on-health-nutrition-in-cuba-1997.pdf" target="_blank">https://www.american.edu/centers/latin-american-latino-studies/upload/impact-of-us-embargo-on-health-nutrition-in-cuba-1997.pdf</a>
+        </p>
+        <p class="source">
+            Saavedra, D., &amp; Crombet, T. (2017). CIMAvax-EGF: A new therapeutic vaccine for advanced non-small cell lung cancer patients. <em>Frontiers in Immunology, 8,</em> 269. [CIMAVax-EGF]<br>
+            <a href="https://doi.org/10.3389/fimmu.2017.00269" target="_blank">https://doi.org/10.3389/fimmu.2017.00269</a>
+        </p>
+        <p class="source">
+            Crombet Ramos, T. et al. (2020). Nimotuzumab for patients with inoperable cancer of the head and neck. <em>Frontiers in Oncology, 10,</em> 817. [Nimotuzumab]<br>
+            <a href="https://doi.org/10.3389/fonc.2020.00817" target="_blank">https://doi.org/10.3389/fonc.2020.00817</a>
+        </p>
+        <p class="source">
+            Bello-Rivero, I. et al. (2018). HeberFERON, a new formulation of IFNs with improved pharmacodynamics. <em>Seminars in Oncology, 45</em>(1–2), 27–33. [HeberFERON]<br>
+            <a href="https://doi.org/10.1053/j.seminoncol.2018.04.007" target="_blank">https://doi.org/10.1053/j.seminoncol.2018.04.007</a>
+        </p>
+        <p class="source">
+            Sosa Pérez, S. et al. (2025). NeuroEPO plus (NeuralCIM®) in Alzheimer's disease: Post-trial observational follow-up study. <em>Journal of Alzheimer's Disease, 108</em>(3), 1422–1435. [NeuroEPO plus]<br>
+            <a href="https://doi.org/10.1177/13872877251386885" target="_blank">https://doi.org/10.1177/13872877251386885</a>
+        </p>
+        <p class="source">
+            Berlanga, J. et al. (2013). Heberprot-P: A novel product for treating advanced diabetic foot ulcer. <em>MEDICC Review, 15</em>(1), 11–15. [Heberprot-P]<br>
+            <a href="https://doi.org/10.37757/MR2013V15.N1.4" target="_blank">https://doi.org/10.37757/MR2013V15.N1.4</a>
+        </p>
+    </div>
+
+    <!-- TAB 8 -->
+    <div class="tab-panel" id="t8">
+        <h2>8. Lessons from Comparable Contexts: Delivering Care Under Sanctions</h2>
+
+        <h2>Four Practical Approaches</h2>
+        <ol style="padding-left:1.4rem; margin-bottom:1rem;">
+            <li style="margin-bottom:0.6rem"><strong>Assessment first.</strong> Determine what data exists, what is reliable, where the gaps are.</li>
+            <li style="margin-bottom:0.6rem"><strong>Immunization as an entry point.</strong> Practical, engages external actors, builds broader health infrastructure under blockade.</li>
+            <li style="margin-bottom:0.6rem"><strong>DHIS2 for data management.</strong> Open source, free, works on any device. Syncs when power returns. Used in comparable contexts.</li>
+            <li style="margin-bottom:0.6rem"><strong>Roundtable governance.</strong> Government, UN, MSF, local and international NGOs — each with a seat at the table.</li>
+        </ol>
+
+        <p class="source">
+            Baatz, R. K., Ekzayez, A., Najib, Y., Alkhalil, M., Salem, M., Alshiekh, M. A., &amp; Patel, P. (2024). Vaccination governance in protracted conflict settings: The case of northwest Syria. <em>BMC Health Services Research, 24,</em> 1082.<br>
+            <a href="https://doi.org/10.1186/s12913-024-11413-1" target="_blank">https://doi.org/10.1186/s12913-024-11413-1</a>
+        </p>
+        <p class="source">
+            University of Toronto. (2019, June 19). Once caught up in Trump's travel ban, U of T grad builds health information system for Syrian hospitals. <em>University of Toronto News.</em><br>
+            <a href="https://www.utoronto.ca/news/once-caught-trump-s-travel-ban-u-t-grad-builds-health-information-system-syrian-hospitals" target="_blank">https://www.utoronto.ca/news/once-caught-trump-s-travel-ban-u-t-grad-builds-health-information-system-syrian-hospitals</a>
+        </p>
+    </div>
+
+</div>
+
+<script>
+    const nav = document.getElementById('tabNav');
+    const buttons = nav.querySelectorAll('.tab-btn');
+    const panels = document.querySelectorAll('.tab-panel');
+
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const target = btn.dataset.tab;
+            buttons.forEach(b => b.classList.remove('active'));
+            panels.forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(target).classList.add('active');
+        });
+    });
+</script>
+
+</body>
+</html>
