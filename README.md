@@ -6,7 +6,7 @@ Compiled May 2026. Sources are linked directly in the knowledge bank.
 
 ## View the Repository
 
-**[Open the Knowledge Bank →](khushanshahad.github.io/cuba-project)**
+**[Open the Knowledge Bank →](https://khushanshahad.github.io/cuba-project/)**
 
 ## What's Inside
 
